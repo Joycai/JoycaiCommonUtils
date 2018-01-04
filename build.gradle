@@ -35,7 +35,7 @@ dependencies{
     testCompile "junit:junit:4.11"
 }
 
-task "createDirs" << {
+task createDirs {
     sourceSets*.scala.srcDirs*.each { it.mkdirs() }
     sourceSets*.java.srcDirs*.each { it.mkdirs() }
     sourceSets*.resources.srcDirs*.each { it.mkdirs() }

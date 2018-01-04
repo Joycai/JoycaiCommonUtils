@@ -1,4 +1,4 @@
-package joycai.utils.date
+package joycai.utils.data
 
 import java.math.BigDecimal
 
@@ -14,6 +14,11 @@ object Number {
     getDecimalHalfUp(b, 3).doubleValue()
   }
 
+  /**
+    * 保留两位小数
+    * @param input
+    * @return
+    */
   def get2BitDecimal( input : Double) : Double = {
     val b = new BigDecimal(input)
     getDecimalHalfUp(b, 2).doubleValue()

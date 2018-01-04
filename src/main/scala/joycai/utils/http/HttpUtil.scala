@@ -19,7 +19,12 @@ class HttpUtil private(val url: String) {
 
   protected var readTimeout: Int = 30000
 
-  protected var conn: HttpURLConnection = buildHttpURLConn()
+  protected var requestHeader : Map[String,String] = _
+
+  implicit def jMapToMap( jmap : util.Map[String,String]) = {
+    import scala.collection.JavaConverters._
+    jmap.asScala.toMap
+  }
 
   /**
     * 添加请求体
@@ -42,9 +47,14 @@ class HttpUtil private(val url: String) {
     */
   def addHeader(header: Map[String, String]): HttpUtil = {
     if (header != null && !(header.isEmpty)) {
-      header.filterNot((h) => Strings.isNullOrEmpty(h._1)).foreach((h) => conn.setRequestProperty(h._1, h._2))
+      this.requestHeader = header
     }
     return this
+  }
+
+  def addHeader(header: util.Map[String, String]): HttpUtil = {
+    import scala.collection.JavaConverters._
+    addHeader(header.asScala.toMap)
   }
 
   /**
@@ -55,7 +65,7 @@ class HttpUtil private(val url: String) {
     */
   def setReadTimeout(timeout: Int): HttpUtil = {
     if (timeout > 0) {
-      conn.setReadTimeout(timeout)
+      this.readTimeout = timeout
     }
     return this;
   }
@@ -66,6 +76,7 @@ class HttpUtil private(val url: String) {
     * @return
     */
   def post: HttpResponse = {
+    var conn = buildHttpURLConn()
     conn.setRequestMethod("POST")
     conn.connect
     if (!Strings.isNullOrEmpty(this.requestBody)) {
@@ -74,7 +85,7 @@ class HttpUtil private(val url: String) {
       out.flush()
       out.close()
     }
-    return readResponse;
+    return readResponse(conn);
   }
 
   /**
@@ -83,12 +94,14 @@ class HttpUtil private(val url: String) {
     * @return
     */
   def get: HttpResponse = {
+    var conn = buildHttpURLConn()
     conn.setRequestMethod("GET")
     conn.connect
-    return readResponse;
+    return readResponse(conn);
   }
 
   def download: Array[Byte] = {
+    var conn = buildHttpURLConn()
     val inStream = conn.getInputStream
     val baos = new ByteArrayOutputStream
     var len = 0
@@ -109,7 +122,7 @@ class HttpUtil private(val url: String) {
     *
     * @return
     */
-  protected def readResponse: HttpResponse = {
+  protected def readResponse( conn: HttpURLConnection): HttpResponse = {
     var is: InputStream = null
 
     var response: HttpResponse = new HttpResponse
@@ -227,9 +240,16 @@ class HttpUtil private(val url: String) {
     var connection: HttpURLConnection = url.openConnection.asInstanceOf[HttpURLConnection];
     connection.setDoOutput(true)
     connection.setDoInput(true)
+    connection.setUseCaches(true)
     connection.setConnectTimeout(3000)
     connection.setReadTimeout(this.readTimeout)
     connection.setInstanceFollowRedirects(true)
+
+    if (null!=requestHeader&& !requestHeader.isEmpty){
+      requestHeader.foreach(  kv  => {
+        connection.setRequestProperty(kv._1, kv._2)
+      })
+    }
 
     return connection
   }
@@ -240,4 +260,6 @@ object HttpUtil {
   def fromUrl(url: String): HttpUtil = {
     return new HttpUtil(url)
   }
+
+
 }
