@@ -6,6 +6,9 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
                                  val name: String,
                                  val taskProcessor: TaskProcessor[T, R] ) {
 
+
+  @volatile var bufferSize:Int = 5;
+
   @volatile var maxThreadNum: Int = 1
 
   @volatile var threadCounter: Int = 0
@@ -22,18 +25,24 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
         try {
           //检测任务
           if (taskOffer != null && canOffer()) {
-            taskQueue.offer(taskOffer.offerTask())
+            val task = Some(taskOffer.offerTask())
+            if(task.isDefined && task.get!=null){
+              taskQueue.offer(task.get)
+            }
           }
           //检测结果
           if (null != resultProcessor && !resultQueue.isEmpty) {
             executorService.submit(new Runnable {
               override def run(): Unit = {
-                resultProcessor.processResult(resultQueue.poll())
+                val result = Some(resultQueue.poll())
+                if (result.isDefined && result.get!=null){
+                  resultProcessor.processResult(result.get)
+                }
               }
             })
           }
           //检测是否需要增加处理器
-          if (threadCounter < maxThreadNum && !taskQueue.isEmpty) {
+          if (maxThreadNum>0 && threadCounter < maxThreadNum && !taskQueue.isEmpty) {
             executorService.submit(new Runner)
           }
           Thread.sleep(1000l)
@@ -51,7 +60,8 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
     */
   def canOffer(): Boolean = {
     this.synchronized {
-      return (taskQueue.size() + threadCounter) <= maxThreadNum * 2 && resultQueue.size() <= maxThreadNum * 2
+      val size = bufferSize * 2;
+      return (taskQueue.size() + threadCounter) <= size && resultQueue.size() <= size
     }
   }
 
@@ -99,6 +109,16 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
   }
 
   /**
+    * 设置缓冲大小
+    * @param num
+    */
+  def setBufferSize(num:Int) = {
+    this.synchronized{
+      this.bufferSize = num
+    }
+  }
+
+  /**
     * 处理线程
     */
   private class Runner extends Runnable {
@@ -117,9 +137,9 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
       println(name + " thread-" + threadCode + " start")
       /*加入执行代码*/
       if (!taskQueue.isEmpty && taskProcessor != null) {
-        var result = taskProcessor.processTask(taskQueue.poll())
-        if (null != result) {
-          resultQueue.offer(result)
+        val result = Some(taskProcessor.processTask(taskQueue.poll()))
+        if (result.isDefined && result.get!=null) {
+          resultQueue.offer(result.get)
         }
       }
 
