@@ -17,6 +17,13 @@ object DateTime {
     cal1.getTime
   }
 
+  /**
+    * 获取时间字符串
+    *
+    * @param format
+    * @param timeZone
+    * @return
+    */
   def getTimeStr(format: String, timeZone: String): String = {
     val timestamp = System.currentTimeMillis
     val df = new SimpleDateFormat(format)
