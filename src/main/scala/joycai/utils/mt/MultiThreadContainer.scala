@@ -9,9 +9,9 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
 
   @volatile var bufferSize:Int = 5;
 
-  @volatile var maxThreadNum: Int = 1
+  @volatile var maxThreadNum: Int = 1;
 
-  @volatile var threadCounter: Int = 0
+  @volatile var threadCounter: Int = 0;
 
   protected val taskQueue: ConcurrentLinkedQueue[T] = new ConcurrentLinkedQueue[T]()
 

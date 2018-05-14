@@ -1,5 +1,5 @@
 group 'joycai'
-version '0.0.3'
+version '0.0.4'
 
 apply plugin: 'idea'
 apply plugin: 'scala'
@@ -20,7 +20,7 @@ repositories{
 
 dependencies{
     //scala support
-    def scalaVersion = '2.12.5'
+    def scalaVersion = '2.12.6'
     compile group: "org.scala-lang", name: "scala-library",version: scalaVersion
     compile group: "org.scala-lang", name: "scala-compiler",version: scalaVersion
     compile group: "org.scala-lang", name: "scala-reflect",version: scalaVersion
@@ -30,6 +30,7 @@ dependencies{
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '+'
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+    compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.59'
     runtime group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
 
     testCompile "junit:junit:4.11"
@@ -53,4 +54,9 @@ tasks.withType(JavaCompile) {
 
 task wrapper(type:Wrapper){
     gradleVersion = '4.6'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
 }
