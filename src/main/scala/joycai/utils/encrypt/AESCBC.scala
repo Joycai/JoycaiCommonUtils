@@ -16,14 +16,14 @@ object AESCBC {
   var CODE_CHARSET = Charsets.UTF_8
 
   /**
-    * 加密【byte】
+    * 加密
     *
     * @param data
     * @param pwd
     * @param iv
     * @return
     */
-  def encrypt(data: Array[Byte], pwd: String, iv: String): Array[Byte] = {
+  def encrypt(data: Array[Byte], pwd: Array[Byte], iv: Array[Byte]): Array[Byte] = {
     val cipher = getCipher()
     cipher.init(Cipher.ENCRYPT_MODE, getKey(pwd), getIV(iv))
     val encryptedData = cipher.doFinal(data)
@@ -31,11 +31,23 @@ object AESCBC {
   }
 
   /**
+    * 加密【byte】
+    *
+    * @param data
+    * @param pwd 秘钥 base64 encode
+    * @param iv  向量 base64 encode
+    * @return
+    */
+  def encrypt(data: Array[Byte], pwd: String, iv: String): Array[Byte] = {
+    encrypt(data, Base64.getDecoder.decode(pwd), Base64.getDecoder.decode(iv))
+  }
+
+  /**
     * 加密，string
     *
-    * @param data string
-    * @param pwd
-    * @param iv
+    * @param data rawString
+    * @param pwd  base64 encode
+    * @param iv   base64 encode
     * @return Base64 string
     */
   def encrypt(data: String, pwd: String, iv: String): String = {
@@ -44,14 +56,14 @@ object AESCBC {
   }
 
   /**
-    * 解密[byte]
+    * 解密
     *
     * @param data
     * @param pwd
     * @param iv
     * @return
     */
-  def decrypt(data: Array[Byte], pwd: String, iv: String): Array[Byte] = {
+  def decrypt(data: Array[Byte], pwd: Array[Byte], iv: Array[Byte]): Array[Byte] = {
     val cipher = getCipher()
     cipher.init(Cipher.DECRYPT_MODE, getKey(pwd), getIV(iv))
     val decryptedData = cipher.doFinal(data)
@@ -59,11 +71,23 @@ object AESCBC {
   }
 
   /**
+    * 解密[byte]
+    *
+    * @param data
+    * @param pwd base64String
+    * @param iv  base64String
+    * @return
+    */
+  def decrypt(data: Array[Byte], pwd: String, iv: String): Array[Byte] = {
+    decrypt(data, Base64.getDecoder.decode(pwd), Base64.getDecoder.decode(iv))
+  }
+
+  /**
     * 解密base64
     *
     * @param data base64String
-    * @param pwd
-    * @param iv
+    * @param pwd  base64String
+    * @param iv   base64String
     * @return
     */
   def decrypt(data: String, pwd: String, iv: String): Array[Byte] = {
@@ -76,7 +100,7 @@ object AESCBC {
     Cipher.getInstance("AES/CBC/PKCS7PADDING", "BC")
   }
 
-  private def getKey(pwd: String): SecretKeySpec = new SecretKeySpec(pwd.getBytes(CODE_CHARSET), "AES");
+  private def getKey(pwd: Array[Byte]): SecretKeySpec = new SecretKeySpec(pwd, "AES")
 
-  private def getIV(iv: String): IvParameterSpec = new IvParameterSpec(iv.getBytes(CODE_CHARSET))
+  private def getIV(iv: Array[Byte]): IvParameterSpec = new IvParameterSpec(iv)
 }
