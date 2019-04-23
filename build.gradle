@@ -1,11 +1,13 @@
+plugins{
+    id 'java'
+    id 'scala'
+    id 'idea'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 group 'joycai'
 version '0.1.0'
-
-apply plugin: 'idea'
-apply plugin: 'scala'
-apply plugin: 'java'
-
-sourceCompatibility = 1.8
 
 repositories {
     jcenter()
@@ -21,19 +23,19 @@ repositories {
 dependencies {
     //scala support
     def scalaVersion = '2.12.8'
-    compile group: "org.scala-lang", name: "scala-library", version: scalaVersion
-    compile group: "org.scala-lang", name: "scala-compiler", version: scalaVersion
-    compile group: "org.scala-lang", name: "scala-reflect", version: scalaVersion
+    implementation group: "org.scala-lang", name: "scala-library", version: scalaVersion
+    implementation group: "org.scala-lang", name: "scala-compiler", version: scalaVersion
+    implementation group: "org.scala-lang", name: "scala-reflect", version: scalaVersion
 
-    compile group: 'com.google.guava', name: 'guava', version: '+'
+    implementation group: 'com.google.guava', name: 'guava', version: '+'
 
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '+'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '+'
 
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
-    compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.59'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.59'
     runtime group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
 
-    testCompile "junit:junit:4.11"
+    testImplementation "junit:junit:4.11"
 }
 
 task createDirs {
@@ -48,10 +50,11 @@ task run(type: JavaExec, dependsOn: classes) {
     classpath configurations.runtime
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+task sourceJar(type: Jar) {
+    archiveClassifier = "sources"
+    from sourceSets.main.allSource
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    from sourceSets.main.allSource
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
 }
