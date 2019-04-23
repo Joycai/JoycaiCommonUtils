@@ -51,7 +51,7 @@ task run(type: JavaExec, dependsOn: classes) {
 }
 
 task sourceJar(type: Jar) {
-    archiveClassifier = "sources"
+    getArchiveClassifier().set('sources')
     from sourceSets.main.allSource
 }
 
