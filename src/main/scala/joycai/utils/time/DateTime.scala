@@ -5,6 +5,11 @@ import java.util.{Calendar, Date, Locale, TimeZone}
 
 object DateTime {
 
+  /**
+    * 获取中国的当前时间
+    *
+    * @return
+    */
   def nowChina(): Calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+8"), Locale.CHINA)
 
   def zeroDate(data: Date): Date = {

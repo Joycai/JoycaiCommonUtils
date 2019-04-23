@@ -1,5 +1,5 @@
 package joycai.utils.mt
 
-trait TaskProcessor[T,R] {
-  def processTask(task :T):R
+trait TaskProcessor[T, R] {
+  def processTask(task: T): R
 }

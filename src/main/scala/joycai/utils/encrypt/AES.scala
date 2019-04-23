@@ -26,9 +26,8 @@ object AES {
     }
 
     val kgen = KeyGenerator.getInstance("AES")
-    /**
-      * 不明原因，一定要这么写
-      */
+
+    //不明原因，一定要这么写
     val random = SecureRandom.getInstance("SHA1PRNG")
     random.setSeed(pwd.getBytes)
 

@@ -2,12 +2,20 @@ package joycai.utils.mt
 
 import java.util.concurrent.{ConcurrentLinkedQueue, ExecutorService}
 
+/**
+  * 多线程容器
+  *
+  * @param executorService
+  * @param name
+  * @param taskProcessor
+  * @tparam T 任务类型
+  * @tparam R 结果类型
+  */
 class MultiThreadContainer[T, R](val executorService: ExecutorService,
                                  val name: String,
-                                 val taskProcessor: TaskProcessor[T, R] ) {
+                                 val taskProcessor: TaskProcessor[T, R]) {
 
-
-  @volatile var bufferSize:Int = 5;
+  @volatile var bufferSize: Int = 5;
 
   @volatile var maxThreadNum: Int = 1;
 
@@ -17,7 +25,6 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
 
   protected val resultQueue: ConcurrentLinkedQueue[R] = new ConcurrentLinkedQueue[R]()
 
-
   //watchdog
   executorService.submit(new Runnable {
     override def run(): Unit = {
@@ -26,7 +33,7 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
           //检测任务
           if (taskOffer != null && canOffer()) {
             val task = Some(taskOffer.offerTask())
-            if(task.isDefined && task.get!=null){
+            if (task.isDefined && task.get != null) {
               taskQueue.offer(task.get)
             }
           }
@@ -35,14 +42,14 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
             executorService.submit(new Runnable {
               override def run(): Unit = {
                 val result = Some(resultQueue.poll())
-                if (result.isDefined && result.get!=null){
+                if (result.isDefined && result.get != null) {
                   resultProcessor.processResult(result.get)
                 }
               }
             })
           }
           //检测是否需要增加处理器
-          if (maxThreadNum>0 && threadCounter < maxThreadNum && !taskQueue.isEmpty) {
+          if (maxThreadNum > 0 && threadCounter < maxThreadNum && !taskQueue.isEmpty) {
             executorService.submit(new Runner)
           }
           Thread.sleep(1000l)
@@ -96,7 +103,6 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
     }
   }
 
-
   /**
     * 设置线程数
     *
@@ -110,10 +116,11 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
 
   /**
     * 设置缓冲大小
+    *
     * @param num
     */
-  def setBufferSize(num:Int) = {
-    this.synchronized{
+  def setBufferSize(num: Int) = {
+    this.synchronized {
       this.bufferSize = num
     }
   }
@@ -138,7 +145,7 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
       /*加入执行代码*/
       if (!taskQueue.isEmpty && taskProcessor != null) {
         val result = Some(taskProcessor.processTask(taskQueue.poll()))
-        if (result.isDefined && result.get!=null) {
+        if (result.isDefined && result.get != null) {
           resultQueue.offer(result.get)
         }
       }
