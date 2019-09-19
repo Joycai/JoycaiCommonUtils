@@ -52,7 +52,7 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
           if (maxThreadNum > 0 && threadCounter < maxThreadNum && !taskQueue.isEmpty) {
             executorService.submit(new Runner)
           }
-          Thread.sleep(1000l)
+          Thread.sleep(1000L)
         } catch {
           case e: Exception => e.printStackTrace()
         }

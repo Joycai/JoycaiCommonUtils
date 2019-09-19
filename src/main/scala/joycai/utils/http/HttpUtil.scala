@@ -22,7 +22,9 @@ class HttpUtil private(val url: String) {
   protected var requestHeader : Map[String,String] = _
 
   implicit def jMapToMap( jmap : util.Map[String,String]) = {
-    import scala.collection.JavaConverters._
+
+//    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters.MapHasAsScala
     jmap.asScala.toMap
   }
 
@@ -53,7 +55,7 @@ class HttpUtil private(val url: String) {
   }
 
   def addHeader(header: util.Map[String, String]): HttpUtil = {
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters.MapHasAsScala
     addHeader(header.asScala.toMap)
   }
 
@@ -128,7 +130,7 @@ class HttpUtil private(val url: String) {
     var response: HttpResponse = new HttpResponse
 
     //获取头
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters._
 
     var responseHeader: mutable.Map[String, String] = mutable.HashMap()
 
@@ -136,7 +138,7 @@ class HttpUtil private(val url: String) {
 
     if (null != headerFields && !(headerFields.isEmpty)) {
 
-      headerFields.filterKeys( k => !Strings.isNullOrEmpty( k ) )
+      headerFields.view.filterKeys( k => !Strings.isNullOrEmpty( k ) )
         .foreach( mapEntity => {
           var str: mutable.StringBuilder = new mutable.StringBuilder()
           mapEntity._2.asScala.foreach( value => str.append(value) );
