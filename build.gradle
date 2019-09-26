@@ -38,14 +38,12 @@ dependencies {
     implementation group: "org.scala-lang", name: "scala-reflect", version: scalaVersion
 
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
-
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
-
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
     implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: bouncycastleVersion
-    runtimeOnly group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
 
-    testImplementation "junit:junit:4.11"
+    api group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
+    testImplementation "junit:junit:4.12"
 }
 
 task createDirs {
