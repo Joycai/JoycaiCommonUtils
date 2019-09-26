@@ -1,18 +1,29 @@
+buildscript {
+    ext{
+        scalaVersion = '2.13.1'
+        guavaVersion = '27.1-jre'
+        jacksonVersion = '2.9.10'
+        slf4jVersion = '1.7.28'
+        bouncycastleVersion = '1.63'
+        logbackVersion = '1.2.3'
+    }
+}
+
 plugins{
     id 'java'
     id 'scala'
     id 'idea'
 }
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 group 'joycai'
-version '0.1.0'
+version '0.1.2'
 
 repositories {
-    jcenter()
     mavenCentral()
-    mavenLocal()
+    jcenter()
     repositories {
         flatDir {
             dirs 'libs'
@@ -22,18 +33,17 @@ repositories {
 
 dependencies {
     //scala support
-    def scalaVersion = '2.13.1'
     implementation group: "org.scala-lang", name: "scala-library", version: scalaVersion
     implementation group: "org.scala-lang", name: "scala-compiler", version: scalaVersion
     implementation group: "org.scala-lang", name: "scala-reflect", version: scalaVersion
 
-    implementation group: 'com.google.guava', name: 'guava', version: '+'
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
 
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '+'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
 
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26  '
-    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.59'
-    runtime group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: bouncycastleVersion
+    runtimeOnly group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
 
     testImplementation "junit:junit:4.11"
 }
