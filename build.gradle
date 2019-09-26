@@ -10,7 +10,7 @@ buildscript {
 }
 
 plugins{
-    id 'java'
+    id 'java-library'
     id 'scala'
     id 'idea'
 }
