@@ -19,7 +19,7 @@ object AES {
     * @param pwd 密钥 16位
     * @return null 表示加密失败 ; 成功则是Base64之后的字符串
     */
-  def encrypt(content:String, pwd : String) : String ={
+    def encrypt(content:String, pwd : String) : String ={
     if (Strings.isNullOrEmpty(pwd)|| pwd.length!=16){
       logger.error("pwd length must equals 16")
       return null;

@@ -3,8 +3,8 @@ buildscript {
         scalaVersion = '2.13.1'
         guavaVersion = '27.1-jre'
         jacksonVersion = '2.9.10'
-        slf4jVersion = '1.7.28'
-        bouncycastleVersion = '1.63'
+        slf4jVersion = '1.7.30'
+        bouncycastleVersion = '1.64'
         logbackVersion = '1.2.3'
     }
 }
@@ -15,8 +15,10 @@ plugins{
     id 'idea'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+java{
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 group 'joycai'
 version '0.1.2'
