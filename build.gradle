@@ -21,11 +21,11 @@ java{
 }
 
 group 'joycai'
-version '0.1.2'
+version '0.2.1'
 
 repositories {
-    mavenCentral()
     jcenter()
+    mavenCentral()
     repositories {
         flatDir {
             dirs 'libs'
@@ -35,16 +35,18 @@ repositories {
 
 dependencies {
     //scala support
-    implementation group: "org.scala-lang", name: "scala-library", version: scalaVersion
-    implementation group: "org.scala-lang", name: "scala-compiler", version: scalaVersion
-    implementation group: "org.scala-lang", name: "scala-reflect", version: scalaVersion
+    implementation group: "org.scala-lang", name: "scala-library", version: '2.13.1'
+    implementation group: "org.scala-lang", name: "scala-compiler", version: '2.13.1'
+    implementation group: "org.scala-lang", name: "scala-reflect", version: '2.13.1'
 
-    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
-    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: bouncycastleVersion
+    implementation group: 'com.google.guava', name: 'guava', version: '27.1-jre'
+    implementation 'org.apache.commons:commons-lang3:3.9'
 
-    api group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.+'
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.63'
+
+    api group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     testImplementation "junit:junit:4.12"
 }
 

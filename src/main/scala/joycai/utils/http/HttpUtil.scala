@@ -21,8 +21,7 @@ class HttpUtil private(val url: String) {
 
   protected var requestHeader : Map[String,String] = _
 
-  implicit def jMapToMap( jmap : util.Map[String,String]) = {
-
+  implicit def jMapToMap( jmap : util.Map[String,String]): Map[String, String] = {
 //    import scala.collection.JavaConverters._
     import scala.jdk.CollectionConverters.MapHasAsScala
     jmap.asScala.toMap
@@ -48,7 +47,7 @@ class HttpUtil private(val url: String) {
     * @return
     */
   def addHeader(header: Map[String, String]): HttpUtil = {
-    if (header != null && !(header.isEmpty)) {
+    if (header != null && header.nonEmpty) {
       this.requestHeader = header
     }
     return this
@@ -62,7 +61,7 @@ class HttpUtil private(val url: String) {
   /**
     * 设置读取超时
     *
-    * @param timeout
+    * @param timeout 超时时间ms
     * @return
     */
   def setReadTimeout(timeout: Int): HttpUtil = {
@@ -78,16 +77,16 @@ class HttpUtil private(val url: String) {
     * @return
     */
   def post: HttpResponse = {
-    var conn = buildHttpURLConn()
+    val conn = buildHttpURLConn()
     conn.setRequestMethod("POST")
-    conn.connect
+    conn.connect()
     if (!Strings.isNullOrEmpty(this.requestBody)) {
       val out = new OutputStreamWriter(conn.getOutputStream, "UTF-8") // utf-8编码
       out.append(this.requestBody)
       out.flush()
       out.close()
     }
-    return readResponse(conn);
+    readResponse(conn)
   }
 
   /**
@@ -96,14 +95,14 @@ class HttpUtil private(val url: String) {
     * @return
     */
   def get: HttpResponse = {
-    var conn = buildHttpURLConn()
+    val conn = buildHttpURLConn()
     conn.setRequestMethod("GET")
     conn.connect
-    return readResponse(conn);
+    readResponse(conn)
   }
 
   def download: Array[Byte] = {
-    var conn = buildHttpURLConn()
+    val conn = buildHttpURLConn()
     val inStream = conn.getInputStream
     val baos = new ByteArrayOutputStream
     var len = 0
@@ -115,7 +114,7 @@ class HttpUtil private(val url: String) {
     inStream.close()
     baos.close()
     baos.flush()
-    return baos.toByteArray
+    baos.toByteArray
   }
 
 
@@ -132,15 +131,15 @@ class HttpUtil private(val url: String) {
     //获取头
     import scala.jdk.CollectionConverters._
 
-    var responseHeader: mutable.Map[String, String] = mutable.HashMap()
+    val responseHeader: mutable.Map[String, String] = mutable.HashMap()
 
     val headerFields: mutable.Map[String, util.List[String]] = conn.getHeaderFields.asScala
 
-    if (null != headerFields && !(headerFields.isEmpty)) {
+    if (null != headerFields && headerFields.nonEmpty) {
 
       headerFields.view.filterKeys( k => !Strings.isNullOrEmpty( k ) )
         .foreach( mapEntity => {
-          var str: mutable.StringBuilder = new mutable.StringBuilder()
+          val str: mutable.StringBuilder = new mutable.StringBuilder()
           mapEntity._2.asScala.foreach( value => str.append(value) );
 
           responseHeader.put(mapEntity._1, str.toString())
@@ -187,7 +186,7 @@ class HttpUtil private(val url: String) {
       }
       val result = new String(data, "UTF-8") // utf-8编码
       logger.info(result)
-      return result
+      result
     } else {
       /**
         * 尝试规避content-length问题
@@ -206,7 +205,7 @@ class HttpUtil private(val url: String) {
       }
       isr.close()
       logger.info(sb.toString)
-      return sb.toString
+      sb.toString
     }
   }
 
@@ -234,7 +233,7 @@ class HttpUtil private(val url: String) {
     gzin.close()
     logger.info(sb.toString)
 
-    return sb.toString
+    sb.toString
   }
 
   protected def buildHttpURLConn(): HttpURLConnection = {
@@ -258,10 +257,7 @@ class HttpUtil private(val url: String) {
 }
 
 object HttpUtil {
-
   def fromUrl(url: String): HttpUtil = {
-    return new HttpUtil(url)
+    new HttpUtil(url)
   }
-
-
 }

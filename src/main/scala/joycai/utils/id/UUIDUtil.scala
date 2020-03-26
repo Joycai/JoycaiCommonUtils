@@ -8,13 +8,12 @@ object UUIDUtil {
 
   def getUUID: UUID = {
     this.synchronized {
-      var uuid = UUID.randomUUID();
-      return uuid;
+      return UUID.randomUUID()
     }
   }
 
   def getUUIDStr: String = {
-    return CharMatcher.anyOf("-").removeFrom(getUUID.toString)
+    CharMatcher.anyOf("-").removeFrom(getUUID.toString)
   }
 
 }

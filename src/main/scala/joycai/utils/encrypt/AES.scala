@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec
 import com.google.common.base.Strings
 import org.slf4j.{Logger, LoggerFactory}
 
+@Deprecated
 object AES {
 
   def logger : Logger = LoggerFactory.getLogger(AES.getClass)
@@ -30,7 +31,6 @@ object AES {
     //不明原因，一定要这么写
     val random = SecureRandom.getInstance("SHA1PRNG")
     random.setSeed(pwd.getBytes)
-
     kgen.init(128, random)
     val secretKey = kgen.generateKey
     val enCodeFormat = secretKey.getEncoded

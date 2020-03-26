@@ -38,9 +38,9 @@ object XMLUtil {
     def sw = new StringWriter();
     try {
       // 利用jdk中自带的转换类实现
-      var context = JAXBContext.newInstance(any.getClass);
+      val context = JAXBContext.newInstance(any.getClass);
 
-      var marshaller = context.createMarshaller();
+      val marshaller = context.createMarshaller();
       // 格式化xml输出的格式
       marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
         true);

@@ -11,6 +11,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 /**
   * 微信的加密方式 AES-128-CBC，数据采用PKCS#7填充
   */
+@Deprecated
 object AESCBC {
 
   var CODE_CHARSET = Charsets.UTF_8
