@@ -1,13 +1,19 @@
 import com.google.common.base.Charsets;
-import joycai.utils.encrypt.AESCBC;
+
 import joycai.utils.encrypt.AESHelper;
 import joycai.utils.encrypt.AESUtil;
 import org.junit.Test;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.Base64;
 
 public class AESTest {
-
 
     @Test
     public void testAESCBC() {
@@ -18,8 +24,30 @@ public class AESTest {
         String key64 = Base64.getEncoder().encodeToString(key.getBytes(Charsets.UTF_8));
         String iv64 = Base64.getEncoder().encodeToString(iv.getBytes(Charsets.UTF_8));
 
-        String ranKey = AESUtil.genAESKey(256, key);
-        String ranIV = AESUtil.genAESKey(128, iv);
+        try {
+            String ranKey = AESUtil.genAESKey(256, key);
+            String ranIV = AESUtil.genAESKey(128, iv);
+            AESHelper helper = AESUtil.getNewAESCBCHelper(ranKey, ranIV);
+            String encryptPhone = helper.encryptToString(phoneInfo.getBytes(Charsets.UTF_8));
+            System.out.println(encryptPhone);
+            String decrypt = new String(helper.decryptFromString(encryptPhone), Charsets.UTF_8);
+            System.out.println(decrypt);
+            assert decrypt.equals(phoneInfo);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (NoSuchProviderException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
 
 //        String data = "你好，1234555";
 
@@ -38,27 +66,24 @@ public class AESTest {
 //
 //        System.out.println(new String(deData, Charsets.UTF_8));
 
-        AESHelper helper = AESUtil.getNewAESCBCHelper(ranKey, ranIV);
-        String encryptPhone = helper.encryptToString(phoneInfo.getBytes(Charsets.UTF_8));
-        System.out.println(encryptPhone);
-        String decrypt = new String(helper.decryptFromString(encryptPhone), Charsets.UTF_8);
-        System.out.println(decrypt);
 
-        assert decrypt.equals(phoneInfo);
     }
 
     @Test
     public void testAESUtil() {
         String keyStr = "1234567890ABCDEFGGGG";
         String keyStr2 = "123456789";
-        String key1 = AESUtil.genAESKey(128, keyStr);
-        String key1_1 = AESUtil.genAESKey(256, keyStr);
 
-        String key2 = AESUtil.genAESKey(128, keyStr2);
-
-        System.out.println(key1);
-        System.out.println(key1_1);
-        System.out.println(key2);
-        assert true;
+        try {
+            String key1 = AESUtil.genAESKey(128, keyStr);
+            String key1_1 = AESUtil.genAESKey(256, keyStr);
+            String key2 = AESUtil.genAESKey(128, keyStr2);
+            System.out.println(key1);
+            System.out.println(key1_1);
+            System.out.println(key2);
+            assert true;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 }
