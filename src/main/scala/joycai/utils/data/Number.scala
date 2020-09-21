@@ -1,6 +1,6 @@
 package joycai.utils.data
 
-import java.math.BigDecimal
+import java.math.{BigDecimal, RoundingMode}
 
 object Number {
 
@@ -25,7 +25,7 @@ object Number {
   }
 
   def getDecimalHalfUp( decimal:BigDecimal , bit: Int): BigDecimal ={
-    decimal.setScale(bit,BigDecimal.ROUND_HALF_UP)
+    decimal.setScale(bit, RoundingMode.HALF_UP)
     decimal
   }
 
