@@ -4,7 +4,7 @@ import java.security.MessageDigest
 
 object MD5 {
 
-  def hash(str:String):String = {
+  def hash(str: String): String = {
     val md = MessageDigest.getInstance("MD5")
     md.update(str.getBytes)
     val b = md.digest
@@ -19,7 +19,7 @@ object MD5 {
     buf.toString
   }
 
-  def hash16(str:String) :String = {
-    hash(str).substring(8,24)
+  def hash16(str: String): String = {
+    hash(str).substring(8, 24)
   }
 }

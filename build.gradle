@@ -1,18 +1,17 @@
-buildscript {
-    ext{
-        scalaVersion = '2.13.3'
-        guavaVersion = '29.0-jre'
-        jacksonVersion = '2.11.2'
-        slf4jVersion = '1.7.30'
-        bouncycastleVersion = '1.64'
-        logbackVersion = '1.2.3'
-    }
-}
-
 plugins{
     id 'java-library'
     id 'scala'
     id 'idea'
+}
+
+ext{
+    scalaVersion = '2.13.4'
+    guavaVersion = '28.2-jre'
+    jacksonVersion = '2.10.+'
+    slf4jVersion = '1.7.30'
+    commonslang3Version = '3.9'
+    bouncycastleVersion = '1.64'
+    logbackVersion = '1.2.3'
 }
 
 java{
@@ -35,22 +34,21 @@ repositories {
 
 dependencies {
     //scala support
-    implementation group: "org.scala-lang", name: "scala-library", version: "$scalaVersion"
-    implementation group: "org.scala-lang", name: "scala-compiler", version: "$scalaVersion"
-    implementation group: "org.scala-lang", name: "scala-reflect", version: "$scalaVersion"
+    implementation group: "org.scala-lang", name: "scala-library", version: "${scalaVersion}"
+    implementation group: "org.scala-lang", name: "scala-compiler", version: "${scalaVersion}"
+    implementation group: "org.scala-lang", name: "scala-reflect", version: "${scalaVersion}"
 
-    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
-    implementation group: 'com.google.guava', name: 'guava', version: "$guavaVersion"
-    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation group: 'com.google.guava', name: 'guava', version: "${guavaVersion}"
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: "${commonslang3Version}"
 
-    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "$jacksonVersion"
-    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15to18', version: "$bouncycastleVersion"
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jacksonVersion}"
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15to18', version: "${bouncycastleVersion}"
 
-    api group: 'org.slf4j', name: 'slf4j-api', version: "$slf4jVersion"
-
-    testImplementation group: "com.fasterxml.jackson.core", name: "jackson-core", version: "$jacksonVersion"
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: "$logbackVersion"
-    testImplementation "junit:junit:4.12"
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: "${logbackVersion}"
+    testImplementation(platform('org.junit:junit-bom:5.7.0'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testImplementation 'org.mockito:mockito-core:3.6.28'
 }
 
 task createDirs {
@@ -72,4 +70,11 @@ task sourceJar(type: Jar) {
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

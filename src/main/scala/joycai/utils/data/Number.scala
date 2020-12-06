@@ -9,9 +9,9 @@ object Number {
     * @param input
     * @return
     */
-  def get3BitDecimal( input : Double ) : Double = {
+  def get3BitDecimal( input : Double ) : BigDecimal = {
     val b = new BigDecimal(input)
-    getDecimalHalfUp(b, 3).doubleValue()
+    getDecimalHalfUp(b, 3)
   }
 
   /**
@@ -19,14 +19,13 @@ object Number {
     * @param input
     * @return
     */
-  def get2BitDecimal( input : Double) : Double = {
+  def get2BitDecimal( input : Double) : BigDecimal = {
     val b = new BigDecimal(input)
-    getDecimalHalfUp(b, 2).doubleValue()
+    getDecimalHalfUp(b, 2)
   }
 
   def getDecimalHalfUp( decimal:BigDecimal , bit: Int): BigDecimal ={
-    decimal.setScale(bit, RoundingMode.HALF_UP)
-    decimal
+    decimal.setScale(bit,BigDecimal.ROUND_HALF_UP)
   }
 
   implicit def convertDoubleToFloat (in : Double) : Float = in.toFloat

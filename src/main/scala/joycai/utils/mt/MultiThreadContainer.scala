@@ -6,14 +6,14 @@ import java.util.concurrent.{ConcurrentLinkedQueue, ExecutorService}
   * 多线程容器
   *
   * @param executorService 线程池
-  * @param name 名称
-  * @param taskProcessor 任务处理函数
+  * @param name            名称
+  * @param taskProcessor   任务处理函数
   * @tparam T 任务类型
   * @tparam R 结果类型
   */
 class MultiThreadContainer[T, R](val executorService: ExecutorService,
                                  val name: String,
-                                 val taskProcessor: TaskProcessor[ T, R]) {
+                                 val taskProcessor: TaskProcessor[T, R]) {
 
   @volatile var bufferSize: Int = 5;
 
