@@ -2,7 +2,9 @@ plugins{
     id 'java-library'
     id 'scala'
     id 'idea'
+    id 'jacoco'
     id "org.sonarqube" version "3.0"
+    id "org.scoverage" version "5.0.0"
 }
 
 ext{
@@ -31,6 +33,22 @@ sonarqube {
     }
 }
 
+scoverage {
+    coverageOutputXML = true
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
 repositories {
     jcenter()
     mavenCentral()
@@ -52,6 +70,12 @@ dependencies {
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jacksonVersion}"
     implementation group: 'org.bouncycastle', name: 'bcprov-jdk15to18', version: "${bouncycastleVersion}"
+
+    //
+    implementation group: "javax.xml.bind", name: "jaxb-api", version: "2.3.0"
+    implementation group: "com.sun.xml.bind", name: "jaxb-impl", version: "2.3.0"
+    implementation group: "org.glassfish.jaxb", name: "jaxb-runtime", version: "2.3.0"
+    implementation group: "javax.activation", name: "activation", version: "1.1.1"
 
     implementation group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: "${logbackVersion}"
