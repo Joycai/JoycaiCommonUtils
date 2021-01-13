@@ -1,3 +1,6 @@
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Joycai_JoycaiCommonUtils) 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Joycai_JoycaiCommonUtils&metric=alert_status)](https://sonarcloud.io/dashboard?id=Joycai_JoycaiCommonUtils) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Joycai_JoycaiCommonUtils&metric=coverage)](https://sonarcloud.io/dashboard?id=Joycai_JoycaiCommonUtils)
+
 # JoycaiUtils
 
 一些有用的工具集
