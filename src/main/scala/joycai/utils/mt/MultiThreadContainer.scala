@@ -25,47 +25,62 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
 
   protected val resultQueue: ConcurrentLinkedQueue[R] = new ConcurrentLinkedQueue[R]()
 
-  //watchdog
-  executorService.submit(new Runnable {
+  protected val watchdog_thread = new Runnable {
+
+    def checkAndOfferTask(): Unit = {
+      //检测任务
+      if (taskOffer != null && canOffer()) {
+        val task = Some(taskOffer.offerTask())
+        if (task.isDefined && task.get != null) {
+          taskQueue.offer(task.get)
+        }
+      }
+    }
+
+    def checkResult(): Unit = {
+      //检测结果
+      if (null != resultProcessor && !resultQueue.isEmpty) {
+        executorService.submit(new Runnable {
+          override def run(): Unit = {
+            val result = Some(resultQueue.poll())
+            if (result.isDefined && result.get != null) {
+              resultProcessor.processResult(result.get)
+            }
+          }
+        })
+      }
+    }
+
+    def checkProcessor(): Unit = {
+      //检测是否需要增加处理器
+      if (maxThreadNum > 0 && threadCounter < maxThreadNum && !taskQueue.isEmpty) {
+        executorService.submit(new Runner)
+      }
+    }
+
     override def run(): Unit = {
       while (true) {
         try {
-          //检测任务
-          if (taskOffer != null && canOffer()) {
-            val task = Some(taskOffer.offerTask())
-            if (task.isDefined && task.get != null) {
-              taskQueue.offer(task.get)
-            }
-          }
-          //检测结果
-          if (null != resultProcessor && !resultQueue.isEmpty) {
-            executorService.submit(new Runnable {
-              override def run(): Unit = {
-                val result = Some(resultQueue.poll())
-                if (result.isDefined && result.get != null) {
-                  resultProcessor.processResult(result.get)
-                }
-              }
-            })
-          }
-          //检测是否需要增加处理器
-          if (maxThreadNum > 0 && threadCounter < maxThreadNum && !taskQueue.isEmpty) {
-            executorService.submit(new Runner)
-          }
-          Thread.sleep(1000L)
+          checkAndOfferTask()
+          checkResult()
+          checkProcessor()
+          Thread.sleep(100L)
         } catch {
           case e: Exception => e.printStackTrace()
         }
       }
     }
-  })
+  }
+
+  //watchdog
+  executorService.submit(watchdog_thread)
 
   /**
     * 判断是否可以加入任务
     *
     * @return
     */
-  def canOffer(): Boolean = {
+  def canOffer: Boolean = {
     this.synchronized {
       val size = bufferSize * 2;
       return (taskQueue.size() + threadCounter) <= size && resultQueue.size() <= size
@@ -80,7 +95,7 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
   }
 
   def offerTask(task: T): Boolean = {
-    if (canOffer()) {
+    if (canOffer) {
       taskQueue.offer(task)
       return true
     } else {
@@ -97,9 +112,9 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
 
   def pollResult(): Option[R] = {
     if (resultQueue.isEmpty) {
-      return None
+      None
     } else {
-      return Some(resultQueue.poll());
+      Some(resultQueue.poll());
     }
   }
 
