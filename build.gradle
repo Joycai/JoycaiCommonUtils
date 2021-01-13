@@ -32,7 +32,7 @@ sonarqube {
         property "sonar.projectKey", "Joycai_JoycaiCommonUtils"
         property "sonar.organization", "joycai"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.scala.scoverage.reportPath", ["/build/reports/scoverage/scoverage.xml"]
+        property "sonar.scala.scoverage.reportPath", ["build/reports/scoverage/scoverage.xml"]
     }
 }
 
