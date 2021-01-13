@@ -26,10 +26,19 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Build and analyze
-        run: ./gradlew build
-      - name: sonarqube cloud
+      - name: Build
+        run: gradle build
+      - name: Test Reports
+        run: gradle jacocoTestReport reportScoverage sonarqube --info
+      - name: SonarCloud Scan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew jacocoTestReport reportScoverage sonarqube --info
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.sourceEncoding=UTF-8
+            -Dsonar.projectVersion=0.2.2
+            -Dsonar.projectKey=Joycai_JoycaiCommonUtils
+            -Dsonar.organization=joycai
+            -Dsonar.scala.scoverage.reportPath=build/reports/scoverage/scoverage.xml
