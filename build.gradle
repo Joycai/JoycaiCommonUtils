@@ -34,7 +34,7 @@ sonarqube {
 }
 
 scoverage {
-    coverageOutputXML = true
+    coverageOutputXML.set(true)
 }
 
 jacoco {
