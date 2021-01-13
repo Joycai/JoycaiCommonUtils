@@ -7,14 +7,27 @@ import joycai.utils.encrypt.AESUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 class AESTest {
 
+    private static final String phoneInfo = "{\"phoneNumber\": \"13258787123\",\"purePhoneNumber\": \"13258787123\",\"countryCode\": \"86\",\"watermark\":{\"appid\":\"APPID\",\"timestamp\":1527238257}}";
+    private static final String baseInfo = "{\"openId\": \"openijfdskfjk\",\"nickName\": \"滑稽大人1\",\"gender\": 1,\"city\": \"SH\",\"province\": \"SH\",\"country\": \"CN\",\"avatarUrl\": \"http://111.com\",\"unionId\": \"UNIONID\",\"watermark\":{\"appid\":\"APPID\",\"timestamp\":1527237257}}";
+
     @Test
-    void testAESCBC() {
-        String phoneInfo = "{\"phoneNumber\": \"13258787123\",\"purePhoneNumber\": \"13258787123\",\"countryCode\": \"86\",\"watermark\":{\"appid\":\"APPID\",\"timestamp\":1527238257}}";
-        String baseInfo = "{\"openId\": \"openijfdskfjk\",\"nickName\": \"滑稽大人1\",\"gender\": 1,\"city\": \"SH\",\"province\": \"SH\",\"country\": \"CN\",\"avatarUrl\": \"http://111.com\",\"unionId\": \"UNIONID\",\"watermark\":{\"appid\":\"APPID\",\"timestamp\":1527237257}}";
+    void aesTest() {
+        String keyStr = "sklhdflsjfsdgdeg";
+        String key = AESUtil.genAESKey(256, keyStr);
+        AESHelper ase = AESUtil.getNewAESHelper(key);
+        String encryptStr = ase.encryptToString(baseInfo.getBytes(StandardCharsets.UTF_8));
+
+        Assertions.assertEquals(baseInfo, new String(ase.decryptFromString(encryptStr)));
+    }
+
+    @Test
+    void aescbcTest() {
+
         String key = "sklhdflsjfsdgdeg";
         String iv = "cfbsdfgsddddfxccvd1";
         String key64 = Base64.getEncoder().encodeToString(key.getBytes(Charsets.UTF_8));
@@ -31,7 +44,7 @@ class AESTest {
     }
 
     @Test
-    void testAESUtil() {
+    void aesKegGenTest() {
         String keyStr = "1234567890ABCDEFGGGG";
         String keyStr2 = "123456789";
 
