@@ -29,16 +29,7 @@ jobs:
       - name: Build
         run: gradle build
       - name: Test Reports
-        run: gradle jacocoTestReport reportScoverage --info
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.sourceEncoding=UTF-8
-            -Dsonar.projectVersion=0.2.2
-            -Dsonar.projectKey=Joycai_JoycaiCommonUtils
-            -Dsonar.organization=joycai
-            -Dsonar.scala.scoverage.reportPath=build/reports/scoverage/scoverage.xml
+        run: gradle jacocoTestReport reportScoverage sonarqube --info
