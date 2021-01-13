@@ -29,7 +29,7 @@ class MultiThreadContainer[T, R](val executorService: ExecutorService,
 
     def checkAndOfferTask(): Unit = {
       //检测任务
-      if (taskOffer != null && canOffer()) {
+      if (taskOffer != null && canOffer) {
         val task = Some(taskOffer.offerTask())
         if (task.isDefined && task.get != null) {
           taskQueue.offer(task.get)
