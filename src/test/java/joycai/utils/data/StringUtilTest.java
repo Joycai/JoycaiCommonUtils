@@ -3,7 +3,7 @@ package joycai.utils.data;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-public class StringUtilTest {
+class StringUtilTest {
 
     @Test
     void getSiteDomainTest() {

@@ -3,7 +3,7 @@ package joycai.utils.id;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class MD5Test {
+class MD5Test {
 
     @Test
     void md5UtilTest() {

@@ -11,7 +11,7 @@ class DateTimeTest {
 
     @Test
     void testDateTime() {
-        Assertions.assertDoesNotThrow(() -> DateTime.nowChina());
+        Assertions.assertDoesNotThrow(DateTime::nowChina);
         Assertions.assertDoesNotThrow(() -> DateTime.toLocalDateTime(new Date()));
         Assertions.assertDoesNotThrow(() -> DateTime.toLocalDateTime(new Date(), ZoneId.systemDefault()));
         Assertions.assertDoesNotThrow(() -> DateTime.zeroDate(new Date()));

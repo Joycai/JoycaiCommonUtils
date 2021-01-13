@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class CollectionTest {
+class CollectionTest {
 
     @Test
     void notNullOrEmptyTest() {
