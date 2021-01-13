@@ -19,10 +19,9 @@ class HttpUtil private(val url: String) {
 
   protected var readTimeout: Int = 30000
 
-  protected var requestHeader : Map[String,String] = _
+  protected var requestHeader: Map[String, String] = _
 
-  implicit def jMapToMap( jmap : util.Map[String,String]): Map[String, String] = {
-//    import scala.collection.JavaConverters._
+  implicit def jMapToMap(jmap: util.Map[String, String]): Map[String, String] = {
     import scala.jdk.CollectionConverters.MapHasAsScala
     jmap.asScala.toMap
   }
@@ -123,7 +122,7 @@ class HttpUtil private(val url: String) {
     *
     * @return
     */
-  protected def readResponse( conn: HttpURLConnection): HttpResponse = {
+  protected def readResponse(conn: HttpURLConnection): HttpResponse = {
     var is: InputStream = null
 
     var response: HttpResponse = new HttpResponse
@@ -137,10 +136,10 @@ class HttpUtil private(val url: String) {
 
     if (null != headerFields && headerFields.nonEmpty) {
 
-      headerFields.view.filterKeys( k => !Strings.isNullOrEmpty( k ) )
-        .foreach( mapEntity => {
+      headerFields.view.filterKeys(k => !Strings.isNullOrEmpty(k))
+        .foreach(mapEntity => {
           val str: mutable.StringBuilder = new mutable.StringBuilder()
-          mapEntity._2.asScala.foreach( value => str.append(value) );
+          mapEntity._2.asScala.foreach(value => str.append(value));
 
           responseHeader.put(mapEntity._1, str.toString())
         })
@@ -246,8 +245,8 @@ class HttpUtil private(val url: String) {
     connection.setReadTimeout(this.readTimeout)
     connection.setInstanceFollowRedirects(true)
 
-    if (null!=requestHeader&& !requestHeader.isEmpty){
-      requestHeader.foreach(  kv  => {
+    if (null != requestHeader && !requestHeader.isEmpty) {
+      requestHeader.foreach(kv => {
         connection.setRequestProperty(kv._1, kv._2)
       })
     }
