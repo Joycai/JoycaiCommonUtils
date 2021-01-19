@@ -1,4 +1,4 @@
-plugins{
+plugins {
     id 'java-library'
     id 'scala'
     id 'idea'
@@ -7,7 +7,7 @@ plugins{
     id "org.scoverage" version "5.0.0"
 }
 
-ext{
+ext {
     scalaVersion = '2.13.4'
     guavaVersion = '28.2-jre'
     jacksonVersion = '2.10.+'
@@ -20,7 +20,7 @@ ext{
 group 'joycai'
 version '0.2.2'
 
-java{
+java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
