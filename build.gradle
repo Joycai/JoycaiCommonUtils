@@ -8,13 +8,13 @@ plugins {
 }
 
 ext {
-    scalaVersion = '2.13.4'
-    guavaVersion = '28.2-jre'
+    scalaVersion = '2.13.8'
+    guavaVersion = '30.0-jre'
     jacksonVersion = '2.10.+'
     slf4jVersion = '1.7.30'
     commonslang3Version = '3.9'
-    bouncycastleVersion = '1.64'
-    logbackVersion = '1.2.3'
+    bouncycastleVersion = '1.69'
+    logbackVersion = '1.2.9'
 }
 
 group 'joycai'
@@ -84,7 +84,7 @@ dependencies {
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: "${logbackVersion}"
     testImplementation(platform('org.junit:junit-bom:5.7.0'))
     testImplementation('org.junit.jupiter:junit-jupiter')
-    testImplementation 'org.mockito:mockito-core:3.6.28'
+    testImplementation 'org.mockito:mockito-core:4.6.1'
 }
 
 task createDirs {
@@ -96,7 +96,7 @@ task createDirs {
 task run(type: JavaExec, dependsOn: classes) {
     main = 'joycai.Main'
     classpath sourceSets.main.runtimeClasspath
-    classpath configurations.runtime
+//    classpath configurations.runtime
 }
 
 task sourceJar(type: Jar) {
